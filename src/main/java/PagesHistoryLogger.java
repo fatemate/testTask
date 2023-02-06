@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 
 public class PagesHistoryLogger {
     private int historyDaysDeep = 2;
@@ -84,12 +81,26 @@ public class PagesHistoryLogger {
             return getDifferencePages(dayBeforeA, dayBeforeB);
     }
 
+
+    /**
+     * Returns the URLs of pages whose content has changed.
+     * The sequence of the arguments doesn't matter.
+     */
     public ArrayList<String> getChangedPages(int dayBeforeA, int dayBeforeB) {
-        return null;
+        ArrayList<String> changedPages = new ArrayList<String>();
+        HashMap<String, String> stateA = getHistoryDaysBefore(dayBeforeA);
+
+        for (Map.Entry<String, String> entry: getHistoryDaysBefore(dayBeforeB).entrySet())
+            if (stateA.containsKey(entry.getKey())) {
+                if (!entry.getValue().equals(stateA.get(entry.getKey())))
+                    changedPages.add(entry.getKey());
+            }
+
+        return changedPages;
     }
 
     public ArrayList<String> getChangedPages() {
-        return null;
+        return getChangedPages(0, 1);
     }
 
 
