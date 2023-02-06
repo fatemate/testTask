@@ -40,28 +40,48 @@ public class PagesHistoryLogger {
         getHistoryDaysBefore(0).remove(url);
     }
 
+
+    /**
+     * Returns the difference between page sets A and B (A\B).
+     * Set A is the set of pages {dayBeforeA} days before today.
+     * Set B is the set of pages {dayBeforeB} days before today.
+     * If you swap elements, you can get both new and deleted pages.
+     */
     public ArrayList<String> getDifferencePages(int dayBeforeA, int dayBeforeB) {
-        return null;
+        ArrayList<String> difference = new ArrayList<String>();
+        HashMap<String, String> setA = getHistoryDaysBefore(dayBeforeA);
+
+        for (String s: getHistoryDaysBefore(dayBeforeB).keySet())
+            if (!setA.containsKey(s))
+                difference.add(s);
+
+        return difference;
     }
 
 
     public ArrayList<String> getRemovedPages() {
-        return null;
+        return getDifferencePages(0, 1);
     }
 
 
     public ArrayList<String> getRemovedPages(int dayBeforeA, int dayBeforeB) {
-        return null;
+        if (dayBeforeA < dayBeforeB)
+            return getDifferencePages(dayBeforeA, dayBeforeB);
+        else
+            return getDifferencePages(dayBeforeB, dayBeforeA);
     }
 
 
     public ArrayList<String> getNewPages() {
-        return null;
+        return getDifferencePages(1, 0);
     }
 
 
     public ArrayList<String> getNewPages(int dayBeforeA, int dayBeforeB) {
-        return null;
+        if (dayBeforeA < dayBeforeB)
+            return getDifferencePages(dayBeforeB, dayBeforeA);
+        else
+            return getDifferencePages(dayBeforeA, dayBeforeB);
     }
 
     public ArrayList<String> getChangedPages(int dayBeforeA, int dayBeforeB) {
