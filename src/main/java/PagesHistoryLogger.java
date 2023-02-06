@@ -8,12 +8,17 @@ public class PagesHistoryLogger {
     private Calendar calendar;
     private HashMap<String, String>[] maps = new HashMap[historyDaysDeep];
 
+    /**
+     *   The default constructor uses a TimeZone based on the time zone where the program is running.
+     * */
     public PagesHistoryLogger() {
-
+        this(TimeZone.getDefault());
     }
 
     public PagesHistoryLogger(TimeZone timezone) {
-
+        for (int i = 0; i < historyDaysDeep; i++)
+            maps[i] = new HashMap<String, String>();
+        this.calendar = Calendar.getInstance(timezone);
     }
 
     public void addPage(String url, String html) {
